@@ -8,9 +8,9 @@ const int PORTNUM = 1234;
 
 int main()
 {
-  	int sockfd;
+	int sockfd, nsockfd;
 
-    struct sockaddr_in serv_addr; 
+    struct sockaddr_in serv_addr, cli_addr;
 
 	sockfd = socket(AF_INET, SOCK_STREAM, 0);
 	if(sockfd < 0)
@@ -22,5 +22,16 @@ int main()
 	serv_addr.sin_family = AF_INET;
 	serv_addr.sin_port = htons(PORTNUM);
 	serv_addr.sin_addr.s_addr = INADDR_ANY;
+
+	// Bind to socket
+	int res = bind(sockfd, (const struct sockaddr *)&serv_addr, sizeof(serv_addr));
+	if(res < 0)
+	{
+		printf("Can't bind socket\n");
+		exit(EXIT_FAILURE);
+	}
+
+	// listen for connection
+	listen(sockfd, 5);
 
 }
